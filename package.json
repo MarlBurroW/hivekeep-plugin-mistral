@@ -1,17 +1,17 @@
 {
-  "name": "kinbot-plugin-mistral",
-  "version": "0.2.0",
-  "description": "Mistral AI provider for KinBot — chat models (with tool calling, vision, streaming) AND Voxtral speech-to-text, via api.mistral.ai.",
+  "name": "hivekeep-plugin-mistral",
+  "version": "0.3.0",
+  "description": "Mistral AI provider for Hivekeep — chat models (with tool calling, vision, streaming) AND Voxtral speech-to-text, via api.mistral.ai.",
   "author": "MarlBurroW",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MarlBurroW/kinbot-plugin-mistral.git"
+    "url": "git+https://github.com/MarlBurroW/hivekeep-plugin-mistral.git"
   },
   "bugs": {
-    "url": "https://github.com/MarlBurroW/kinbot-plugin-mistral/issues"
+    "url": "https://github.com/MarlBurroW/hivekeep-plugin-mistral/issues"
   },
-  "homepage": "https://github.com/MarlBurroW/kinbot-plugin-mistral#readme",
+  "homepage": "https://github.com/MarlBurroW/hivekeep-plugin-mistral#readme",
   "main": "index.ts",
   "files": [
     "index.ts",
@@ -20,15 +20,15 @@
     "logo.svg"
   ],
   "keywords": [
-    "kinbot-plugin",
-    "kinbot"
+    "hivekeep-plugin",
+    "hivekeep"
   ],
   "peerDependencies": {
-    "@kinbot-developer/sdk": "^0.5.0"
+    "@hivekeep/sdk": "^0.10.0"
   },
   "dependencies": {},
   "devDependencies": {
-    "@kinbot-developer/sdk": "^0.5.0",
+    "@hivekeep/sdk": "^0.10.0",
     "typescript": "^6.0.3"
   }
 }

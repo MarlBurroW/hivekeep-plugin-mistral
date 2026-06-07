@@ -1,5 +1,5 @@
 /**
- * Mistral AI provider for KinBot.
+ * Mistral AI provider for Hivekeep.
  *
  * Talks to api.mistral.ai with raw fetch + a hand-rolled SSE parser
  * (the Mistral REST API is OpenAI-compatible, so no SDK dependency
@@ -13,7 +13,7 @@
  *
  * Native function calling is supported on chat. Tool calls flow
  * through the standard `tool_calls` array on assistant deltas; this
- * plugin parses them into KinBot's `tool-use` ChatChunks.
+ * plugin parses them into Hivekeep's `tool-use` ChatChunks.
  *
  * Voxtral exposes two transcription models (voxtral-mini-2507,
  * voxtral-small-2507) via the OpenAI-compatible audio endpoint.
@@ -26,9 +26,9 @@ import type {
   LLMModel,
   ChatRequest,
   ChatChunk,
-  KinbotMessage,
-  KinbotMessageBlock,
-  KinbotTool,
+  HivekeepMessage,
+  HivekeepMessageBlock,
+  HivekeepTool,
   SystemPrompt,
   ProviderConfig,
   AuthResult,
@@ -39,7 +39,7 @@ import type {
   TranscriptionModel,
   TranscribeRequest,
   TranscribeResult,
-} from '@kinbot-developer/sdk'
+} from '@hivekeep/sdk'
 
 // ─── Config schema ───────────────────────────────────────────────────────────
 
@@ -145,7 +145,7 @@ interface MistralChatChunk {
   }
 }
 
-// ─── KinBot → Mistral conversions ───────────────────────────────────────────
+// ─── Hivekeep → Mistral conversions ───────────────────────────────────────────
 
 function uint8ToBase64(bytes: Uint8Array): string {
   let binary = ''
@@ -161,7 +161,7 @@ function systemToMistral(system: SystemPrompt | undefined): MistralMessage | nul
 }
 
 function blockToMistralParts(
-  block: KinbotMessageBlock,
+  block: HivekeepMessageBlock,
 ): Array<{ type: 'text'; text: string } | { type: 'image_url'; image_url: { url: string } }> {
   switch (block.type) {
     case 'text':
@@ -182,18 +182,18 @@ function blockToMistralParts(
 }
 
 /**
- * Translate KinBot's discriminated-union messages into Mistral's
+ * Translate Hivekeep's discriminated-union messages into Mistral's
  * OpenAI-compatible shape. Three subtleties:
  *
  * 1. Mistral's tool-result message uses { role: 'tool', tool_call_id,
- *    content }. KinBot's tool-result block lives on a user turn —
+ *    content }. Hivekeep's tool-result block lives on a user turn —
  *    we split user turns whenever tool-result blocks appear so each
  *    tool result becomes its own Mistral message.
  * 2. Multi-modal user turns (text + image) need the content as an
  *    array; pure-text turns use the simpler string form.
  * 3. Thinking blocks have no analog in Mistral and are dropped.
  */
-function messagesToMistral(messages: KinbotMessage[]): MistralMessage[] {
+function messagesToMistral(messages: HivekeepMessage[]): MistralMessage[] {
   const out: MistralMessage[] = []
   for (const m of messages) {
     if (m.role === 'assistant') {
@@ -248,7 +248,7 @@ function messagesToMistral(messages: KinbotMessage[]): MistralMessage[] {
   return out
 }
 
-function toolsToMistral(tools: KinbotTool[] | undefined): MistralTool[] | undefined {
+function toolsToMistral(tools: HivekeepTool[] | undefined): MistralTool[] | undefined {
   if (!tools || tools.length === 0) return undefined
   return tools.map((t) => ({
     type: 'function',
@@ -447,10 +447,10 @@ class MistralProvider implements LLMProvider {
     //   1. Group by `name` (the canonical identifier on every row).
     //   2. Within each group, prefer the entry where `id === name` —
     //      that's the version-pinned id (e.g. `mistral-medium-2508`).
-    //      Pinned beats `-latest` for reproducibility: a Kin pointed at
+    //      Pinned beats `-latest` for reproducibility: a Agent pointed at
     //      `mistral-medium-2508` stays on that exact version when Mistral
     //      pushes 2509 next month. Users who want auto-rolling can edit
-    //      their Kin to whatever `-latest` alias they prefer.
+    //      their Agent to whatever `-latest` alias they prefer.
     const byName = new Map<string, MistralModelListing['data'] extends Array<infer T> ? T : never>()
     for (const m of payload.data ?? []) {
       const groupKey = m.name ?? m.id

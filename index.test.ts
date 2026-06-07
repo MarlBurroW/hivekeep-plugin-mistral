@@ -8,7 +8,7 @@
 
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test'
 import mistralPlugin from './index'
-import type { LLMProvider, PluginContext, ChatRequest, KinbotMessage } from '@kinbot-developer/sdk'
+import type { LLMProvider, PluginContext, ChatRequest, HivekeepMessage } from '@hivekeep/sdk'
 
 // ─── Plugin context stub ────────────────────────────────────────────────────
 
@@ -30,7 +30,7 @@ function makeCtx(): PluginContext {
       deleteSecret: async () => {},
       listKeys: async () => [],
     },
-    manifest: { name: 'kinbot-plugin-mistral', version: '0.1.0' },
+    manifest: { name: 'hivekeep-plugin-mistral', version: '0.1.0' },
     cards: {
       emit: async () => ({ messageId: 'm', cardInstanceId: 'c' }),
       update: async () => {},
@@ -298,7 +298,7 @@ describe('mistral provider — chat request shape', () => {
 
   it('splits a user turn so tool-result blocks become role=tool messages with tool_call_id', async () => {
     const provider = getProvider()
-    const history: KinbotMessage[] = [
+    const history: HivekeepMessage[] = [
       { role: 'user', content: [{ type: 'text', text: 'what is the weather?' }] },
       {
         role: 'assistant',
@@ -332,7 +332,7 @@ describe('mistral provider — chat request shape', () => {
     })
   })
 
-  it('maps KinbotTool[] into Mistral function-call definitions', async () => {
+  it('maps HivekeepTool[] into Mistral function-call definitions', async () => {
     const provider = getProvider()
     const request: ChatRequest = {
       messages: [{ role: 'user', content: [{ type: 'text', text: 'x' }] }],
