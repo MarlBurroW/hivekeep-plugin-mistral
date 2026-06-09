@@ -2,7 +2,7 @@
   "$schema": "https://unpkg.com/@hivekeep/sdk/schemas/plugin-manifest.schema.json",
   "name": "hivekeep-plugin-mistral",
   "displayName": "Mistral AI",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "description": "Mistral AI provider for Hivekeep — chat models (with tool calling, vision, streaming) AND Voxtral speech-to-text, via api.mistral.ai.",
   "author": "MarlBurroW",
   "license": "MIT",

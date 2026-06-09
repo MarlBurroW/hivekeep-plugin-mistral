@@ -1,6 +1,6 @@
 {
   "name": "hivekeep-plugin-mistral",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Mistral AI provider for Hivekeep — chat models (with tool calling, vision, streaming) AND Voxtral speech-to-text, via api.mistral.ai.",
   "author": "MarlBurroW",
   "license": "MIT",
